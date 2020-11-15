@@ -23,5 +23,4 @@ RUN apk --no-cache add ca-certificates
 # copy our static linked library from the previous stage
 COPY --from=builder /go/src/github.com/Bak3y/darkwind_degreaser/darkwind_degreaser /usr/local/bin/darkwind_degreaser
 
-# ENTRYPOINT [ "darkwind_degreaser" ]
-CMD [ /bin/sh sleep 999 ]
+ENTRYPOINT [ "darkwind_degreaser" ]
