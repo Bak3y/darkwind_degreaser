@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func CreateWPNews(eresponse *response.EnjinResponse, wpurl string) (string, error) {
+func CreateWPNews(eresponse *response.EnjinNews, wpurl string) (string, error) {
 	wpdata, err := wpconverter.Convert(eresponse)
 	if err != nil {
 		return "", err

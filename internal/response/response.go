@@ -1,7 +1,7 @@
 package response
 
 //describes the structure of the data coming back from Enjin
-type EnjinResponse struct {
+type EnjinNews struct {
 	Preset_Id   string `json:"preset_id"`
 	Title       string `json:"title"`
 	Content     string `json:"content"`
@@ -13,7 +13,9 @@ type EnjinResponse struct {
 	Avatar      string `json:"avatar"`
 }
 
+//shoutout to Keith again - go wizard
 type EnjinResults struct {
-	Result   string `json:"result"`
-	Response EnjinResponse
+	Result  []*EnjinNews `json:"result"`
+	ID      string       `json:"id"`
+	JSONRPC string       `json:"jsonrpc"`
 }
