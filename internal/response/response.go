@@ -12,3 +12,8 @@ type EnjinResponse struct {
 	Username    string `json:"username"`
 	Avatar      string `json:"avatar"`
 }
+
+type EnjinResults struct {
+	Result   string `json:"result"`
+	Response EnjinResponse
+}

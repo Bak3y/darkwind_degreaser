@@ -12,9 +12,9 @@ import (
 )
 
 //Gets Enjin News articles according to the defined incoming request and url
-func GetEnjinNews(payload *request.NewsPayload, apiurl string) (*response.EnjinResponse, error) {
+func GetEnjinNews(payload *request.NewsPayload, apiurl string) (*response.EnjinResults, error) {
 
-	eresponse := response.EnjinResponse{}
+	ereseults := response.EnjinResults{}
 
 	b, err := json.Marshal(payload)
 	if err != nil {
@@ -38,10 +38,10 @@ func GetEnjinNews(payload *request.NewsPayload, apiurl string) (*response.EnjinR
 	defer res.Body.Close()
 
 	body, err := ioutil.ReadAll(res.Body)
-	err = json.Unmarshal(body, &eresponse)
+	err = json.Unmarshal(body, &ereseults)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "Failed json.Unmarshal(body, &eresponse)")
+		return nil, errors.Wrap(err, "Failed json.Unmarshal(body, &ereseults)")
 	}
-	return &eresponse, nil
+	return &ereseults, nil
 }

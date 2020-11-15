@@ -10,11 +10,13 @@ import (
 	"github.com/Bak3y/darkwind_degreaser/internal/request"
 )
 
+var status string
+
 func main() {
 	// make sure all env vars are set
 	eapikey, eapiurl, esiteid, euserid, elimit, wpurl, err := config.CheckEnvVars()
 	if err != nil {
-		fmt.Println("Error getting env vars: %w", err)
+		fmt.Println("Error getting env vars:", err)
 		os.Exit(1)
 	}
 
@@ -33,15 +35,19 @@ func main() {
 	// get "Limit" amount of items from News.getLatest Enjin api
 	enjinstuff, err := puller.GetEnjinNews(payloadchunk, eapiurl)
 	if err != nil {
-		fmt.Println("Error getting Enjin News: %w", err)
+		fmt.Println("Error getting Enjin news:", err)
 		os.Exit(1)
 	}
 
 	// create WordPress news posts from Enjin data
-	status, err := pusher.CreateWPNews(enjinstuff, wpurl)
-	if err != nil {
-		fmt.Println("Error creating wordpress news: %w", err)
-		os.Exit(1)
+	for _, enjinpost := range enjinstuff.Result {
+
+		status, err = pusher.CreateWPNews(enjinpost.Response, wpurl)
+		if err != nil {
+			fmt.Println("Error creating WordPress news:", err)
+			os.Exit(1)
+		}
+
 	}
 
 	//show something meaniningful to the user

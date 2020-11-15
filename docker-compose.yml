@@ -1,0 +1,10 @@
+version: '2'
+
+services:
+  app:
+    image: darkwind_degreaser
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
