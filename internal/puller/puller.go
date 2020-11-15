@@ -7,10 +7,14 @@ import (
 	"net/http"
 
 	"github.com/Bak3y/darkwind_degreaser/internal/request"
+	"github.com/Bak3y/darkwind_degreaser/internal/response"
 	"github.com/pkg/errors"
 )
 
-func GetEnjinNews(payload *request.NewsPayload, apiurl string) ([]byte, error) {
+//Gets Enjin News articles according to the defined incoming request and url
+func GetEnjinNews(payload *request.NewsPayload, apiurl string) (*response.EnjinResponse, error) {
+
+	eresponse := response.EnjinResponse{}
 
 	b, err := json.Marshal(payload)
 	if err != nil {
@@ -32,6 +36,12 @@ func GetEnjinNews(payload *request.NewsPayload, apiurl string) ([]byte, error) {
 	}
 
 	defer res.Body.Close()
+
 	body, err := ioutil.ReadAll(res.Body)
-	return body, err
+	err = json.Unmarshal(body, &eresponse)
+
+	if err != nil {
+		return nil, errors.Wrap(err, "Failed json.Unmarshal(body, &eresponse)")
+	}
+	return &eresponse, nil
 }
