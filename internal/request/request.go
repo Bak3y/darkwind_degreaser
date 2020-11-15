@@ -12,3 +12,11 @@ type NewsParams struct {
 	Site_id string
 	Limit   string
 }
+
+type WPPost struct {
+	Date    string
+	Status  string
+	Title   string
+	Content string
+	Author  string
+}

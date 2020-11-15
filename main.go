@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// make sure all env vars are set
-	eapikey, eapiurl, esiteid, euserid, err := config.CheckEnvVars()
+	eapikey, eapiurl, esiteid, euserid, wpurl, err := config.CheckEnvVars()
 	if err != nil {
 		fmt.Println("Error getting env vars: %w", err)
 		os.Exit(1)
