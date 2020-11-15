@@ -5,45 +5,14 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"os"
 
+	"github.com/Bak3y/darkwind_degreaser/internal/request"
 	"github.com/pkg/errors"
 )
 
-type Enjin struct{}
+func GetEnjinNews(payload *request.NewsPayload, apiurl string) ([]byte, error) {
 
-const apiurl = "https://www.darkwindgaming.com/api/v1/api.php"
-const siteid = "108898"
-
-var apikey = os.Getenv("ENJIN_API_KEY")
-
-type NewsPayload struct {
-	jsonrpc string
-	id      string
-	method  string
-	params  *NewsParams
-}
-
-type NewsParams struct {
-	api_key string
-	site_id string
-	limit   string
-}
-
-func GetEnjinNews() ([]byte, error) {
-
-	payloadchunk := &NewsPayload{
-		jsonrpc: "2.0",
-		id:      siteid,
-		method:  "News.getLatest",
-		params: &NewsParams{
-			api_key: apikey,
-			site_id: siteid,
-			limit:   "999",
-		},
-	}
-
-	b, err := json.Marshal(payloadchunk)
+	b, err := json.Marshal(payload)
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed json.Marshal()")
 	}
