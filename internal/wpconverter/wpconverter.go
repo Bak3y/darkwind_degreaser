@@ -1,6 +1,7 @@
 package wpconverter
 
 import (
+	"strconv"
 	"time"
 
 	"github.com/Bak3y/darkwind_degreaser/internal/request"
@@ -13,22 +14,16 @@ func Convert(enjinstuff *response.EnjinNews) (*request.WPPost, error) {
 	wpstuff.Title = enjinstuff.Title
 	wpstuff.Author = enjinstuff.Username
 	wpstuff.Content = enjinstuff.Content
-
-	wptime, err := GetTimestamp(enjinstuff.Timestamp)
-	if err != nil {
-		return nil, err
-	}
-
-	wpstuff.Date = wptime.String()
+	wpstuff.Date = GetTimestamp(enjinstuff.Timestamp)
 	return &wpstuff, nil
 }
 
 //shoutout to Keith for the help
-func GetTimestamp(stimestamp string) (time.Time, error) {
-
-	timestamp, err := time.Parse(time.RFC3339, stimestamp)
+func GetTimestamp(stimestamp string) string {
+	i, err := strconv.ParseInt(stimestamp, 10, 64)
 	if err != nil {
-		return time.Now(), err
+		return ""
 	}
-	return timestamp, nil
+	unixtime := time.Unix(i, 0)
+	return unixtime.Format(time.RFC3339)
 }
