@@ -1,16 +1,16 @@
 package request
 
 type NewsPayload struct {
-	JSONRPC string
-	ID      string
-	Method  string
+	JSONRPC string `json:"jsonrpc"`
+	ID      string `json:"id"`
+	Method  string `json:"method"`
 	Params  *NewsParams
 }
 
 type NewsParams struct {
-	Api_key string
-	Site_id string
-	Limit   string
+	Api_key string `json:"api_key"`
+	Site_id string `json:"site_id"`
+	Limit   string `json:"limit"`
 }
 
 type WPPost struct {

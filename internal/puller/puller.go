@@ -21,9 +21,7 @@ func GetEnjinNews(payload *request.NewsPayload, apiurl string) (*response.EnjinR
 		return nil, errors.Wrap(err, "Failed json.Marshal()")
 	}
 
-	buf := bytes.NewBuffer(b)
-
-	req, err := http.NewRequest("POST", apiurl, buf)
+	req, err := http.NewRequest("POST", apiurl, bytes.NewBuffer(b))
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed http.NewRequest()")
 	}
@@ -42,6 +40,9 @@ func GetEnjinNews(payload *request.NewsPayload, apiurl string) (*response.EnjinR
 
 	if err != nil {
 		return nil, errors.Wrap(err, "Failed json.Unmarshal(body, &ereseults)")
+	}
+	if ereseults.Result == nil {
+		return nil, errors.Errorf("Unexpected nil results.")
 	}
 	return &ereseults, nil
 }
