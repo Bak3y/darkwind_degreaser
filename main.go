@@ -38,7 +38,7 @@ func main() {
 	}
 
 	// create WordPress news posts from Enjin data
-	status, err := pusher.CreateWPNews(enjinstuff)
+	status, err := pusher.CreateWPNews(enjinstuff, wpurl)
 	if err != nil {
 		fmt.Println("Error creating wordpress news: %w", err)
 		os.Exit(1)
