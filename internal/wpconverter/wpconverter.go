@@ -23,6 +23,7 @@ func Convert(enjinstuff *response.EnjinResponse) (*request.WPPost, error) {
 	return &wpstuff, nil
 }
 
+//shoutout to Keith for the help
 func GetTimestamp(stimestamp string) (time.Time, error) {
 
 	timestamp, err := time.Parse(time.RFC3339, stimestamp)
