@@ -3,6 +3,7 @@ package pusher
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/Bak3y/darkwind_degreaser/internal/response"
@@ -21,8 +22,7 @@ func CreateWPNews(eresponse *response.EnjinNews, wpurl string) (string, error) {
 		return "", errors.Wrap(err, "Failed json.Marshal()")
 	}
 
-	buf := bytes.NewBuffer(b)
-
-	http.NewRequest("post", wpurl, buf)
-	return "posted", nil
+	http.NewRequest("post", wpurl, bytes.NewBuffer(b))
+	postresponse := fmt.Sprintf("Posted %s by %s on %s\n", wpdata.Title, wpdata.Author, wpdata.Date)
+	return postresponse, nil
 }

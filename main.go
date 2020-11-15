@@ -47,9 +47,7 @@ func main() {
 			fmt.Println("Error creating WordPress news:", err)
 			os.Exit(1)
 		}
+		fmt.Printf(status)
 
 	}
-
-	//show something meaniningful to the user
-	fmt.Printf("Created WP articles: %s", status)
 }
