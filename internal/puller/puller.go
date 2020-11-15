@@ -1,25 +1,65 @@
 package puller
 
 import (
+	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
-	"strings"
+	"os"
+
+	"github.com/pkg/errors"
 )
+
+type Enjin struct{}
+
+const apiurl = "https://www.darkwindgaming.com/api/v1/api.php"
+const siteid = "108898"
+
+var apikey = os.Getenv("ENJIN_API_KEY")
+
+type NewsPayload struct {
+	jsonrpc string
+	id      string
+	method  string
+	params  *NewsParams
+}
+
+type NewsParams struct {
+	api_key string
+	site_id string
+	limit   string
+}
 
 func GetEnjinNews() ([]byte, error) {
 
-	url := "https://www.darkwindgaming.com/api/v1/api.php"
+	payloadchunk := &NewsPayload{
+		jsonrpc: "2.0",
+		id:      siteid,
+		method:  "News.getLatest",
+		params: &NewsParams{
+			api_key: apikey,
+			site_id: siteid,
+			limit:   "999",
+		},
+	}
 
-	payload := strings.NewReader("{\n\t\"jsonrpc\":\"2.0\",\n\t\"id\":\"262230\",\n\t\"params\":{\n\t\t\"api_key\": \"75375895eec487b0090d5c4060accea2a089764ff681e06a\",\n\t\t\"site_id\": \"108898\",\n\t\t\"limit\": \"999\"\n\t},\n\t\"method\":\"News.getLatest\"\n}\n")
+	b, err := json.Marshal(payloadchunk)
+	if err != nil {
+		return nil, errors.Wrap(err, "Failed json.Marshal()")
+	}
 
-	req, _ := http.NewRequest("POST", url, payload)
+	buf := bytes.NewBuffer(b)
 
-	req.Header.Add("cookie", "__cfduid=d0fe7cd1b4c6b29d79394286998e7d1261605408849; api_auth=hif7skej2s4aheh8g65gdas9k4")
+	req, err := http.NewRequest("POST", apiurl, buf)
+	if err != nil {
+		return nil, errors.Wrap(err, "Failed http.NewRequest()")
+	}
+
 	req.Header.Add("Content-Type", "application/json")
 
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "Failed https.DefaultClient.Do(req)")
 	}
 
 	defer res.Body.Close()
