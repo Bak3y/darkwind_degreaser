@@ -11,10 +11,10 @@ import (
 func Convert(enjinstuff *response.EnjinNews) (*request.WPPost, error) {
 	var wpstuff = request.WPPost{}
 
-	wpstuff.Title = enjinstuff.Title
-	wpstuff.Author = enjinstuff.Username
+	wpstuff.Title = enjinstuff.Title + " by " + enjinstuff.Username
 	wpstuff.Content = enjinstuff.Content
 	wpstuff.Date = GetTimestamp(enjinstuff.Timestamp)
+	wpstuff.Status = "draft"
 	return &wpstuff, nil
 }
 

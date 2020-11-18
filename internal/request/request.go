@@ -14,9 +14,8 @@ type NewsParams struct {
 }
 
 type WPPost struct {
-	Date    string
-	Status  string
-	Title   string
-	Content string
-	Author  string
+	Date    string `json:"date"`
+	Status  string `json:"status"`
+	Title   string `json:"title"`
+	Content string `json:"content"`
 }

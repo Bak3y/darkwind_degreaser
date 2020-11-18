@@ -11,7 +11,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-func CreateWPNews(eresponse *response.EnjinNews, wpurl string) (string, error) {
+func CreateWPNews(eresponse *response.EnjinNews, wpurl string, wpauth string) (string, error) {
 	wpdata, err := wpconverter.Convert(eresponse)
 	if err != nil {
 		return "", err
@@ -22,7 +22,25 @@ func CreateWPNews(eresponse *response.EnjinNews, wpurl string) (string, error) {
 		return "", errors.Wrap(err, "Failed json.Marshal()")
 	}
 
-	http.NewRequest("post", wpurl, bytes.NewBuffer(b))
-	postresponse := fmt.Sprintf("Posted %s by %s on %s\n", wpdata.Title, wpdata.Author, wpdata.Date)
+	req, err := http.NewRequest("POST", wpurl, bytes.NewBuffer(b))
+
+	if err != nil {
+		return "", errors.Wrap(err, "Failed creating request to send to wordpress.")
+	}
+
+	req.Header.Add("Content-Type", "application/json")
+	req.Header.Add("Authorization", "Basic "+wpauth)
+
+	res, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return "", errors.Wrap(err, "Failed https.DefaultClient.Do(req)")
+	}
+
+	defer res.Body.Close()
+
+	if res.StatusCode != 201 {
+		return "", errors.Errorf("Unexpected status code from wordpress: %v", res.StatusCode)
+	}
+	postresponse := fmt.Sprintf("Posted %s on %s\n", wpdata.Title, wpdata.Date)
 	return postresponse, nil
 }

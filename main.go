@@ -14,7 +14,7 @@ var status string
 
 func main() {
 	// make sure all env vars are set
-	eapikey, eapiurl, esiteid, euserid, elimit, wpurl, err := config.CheckEnvVars()
+	eapikey, eapiurl, esiteid, euserid, elimit, wpurl, wpauth, err := config.CheckEnvVars()
 	if err != nil {
 		fmt.Println("Error getting env vars:", err)
 		os.Exit(1)
@@ -42,7 +42,7 @@ func main() {
 	// create WordPress news posts from Enjin data
 	for _, enjinpost := range enjinstuff.Result {
 
-		status, err = pusher.CreateWPNews(enjinpost, wpurl)
+		status, err = pusher.CreateWPNews(enjinpost, wpurl, wpauth)
 		if err != nil {
 			fmt.Println("Error creating WordPress news:", err)
 			os.Exit(1)
